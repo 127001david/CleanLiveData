@@ -1,7 +1,6 @@
 package com.rightpoint.oknet.ok;
 
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Description：
@@ -10,8 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitService {
     private static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://management-c-gray.helianhealth.com/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://github.com/")
+            .addConverterFactory(SimpleGsonConverterFactory.create())
             .build();
 
     public static <T> T createService(Class<T> serviceClass) {

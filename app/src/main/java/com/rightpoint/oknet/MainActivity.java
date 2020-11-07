@@ -50,16 +50,16 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        CountViewModel viewModel = new ViewModelProvider(this
+        CountViewModel countViewModel = new ViewModelProvider(this
                 , new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(CountViewModel.class);
 
         EpidemicViewModel epidemicViewModel = new ViewModelProvider(this
                 , new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(EpidemicViewModel.class);
 
-//        findViewById(R.id.fb).setOnClickListener(view -> viewModel.increase());
         FloatingActionButton fb = findViewById(R.id.fb);
         fb.setScaleType(ImageView.ScaleType.CENTER);
         fb.setOnClickListener(view -> epidemicViewModel.loadEpidemic());
+//        fb.setOnClickListener(view -> countViewModel.increase());
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

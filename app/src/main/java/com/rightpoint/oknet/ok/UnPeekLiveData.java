@@ -23,16 +23,16 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
 
     @Override
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
-        ObserverWrapper observerWrapper = observerWrappers.get(owner.hashCode());
+        ObserverWrapper observerWrapper = observerWrappers.get(observer.hashCode());
         if (null == observerWrapper) {
-            observerWrapper = new ObserverWrapper(owner, observer);
-            observerWrappers.put(owner.hashCode(), observerWrapper);
+            observerWrapper = new ObserverWrapper(observer);
+            observerWrappers.put(observer.hashCode(), observerWrapper);
         }
         super.observe(owner, observerWrapper);
     }
 
-    public void removeObserver(@NonNull LifecycleOwner owner) {
-        super.removeObserver(observerWrappers.get(owner.hashCode()));
+    public void removeObserver(@NonNull Observer<? super T> observer) {
+        super.removeObserver(observerWrappers.get(observer.hashCode()));
     }
 
     @Override
@@ -41,9 +41,9 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
         super.setValue(value);
     }
 
-    private boolean received(LifecycleOwner owner) {
-        if (null != observerWrappers.get(owner.hashCode())) {
-            ObserverWrapper observerWrapper = observerWrappers.get(owner.hashCode());
+    private boolean received(Observer<? super T> observer) {
+        if (null != observerWrappers.get(observer.hashCode())) {
+            ObserverWrapper observerWrapper = observerWrappers.get(observer.hashCode());
             if (observerWrapper.mLastVersion >= mVersion) {
                 return true;
             } else {
@@ -56,17 +56,15 @@ public class UnPeekLiveData<T> extends MutableLiveData<T> {
 
     private class ObserverWrapper implements Observer<T> {
         final Observer<? super T> mObserver;
-        final LifecycleOwner mOwner;
         int mLastVersion = -1;
 
-        ObserverWrapper(@NonNull LifecycleOwner owner, Observer<? super T> observer) {
-            mOwner = owner;
+        ObserverWrapper(Observer<? super T> observer) {
             mObserver = observer;
         }
 
         @Override
         public void onChanged(T t) {
-            if (!received(mOwner)) {
+            if (!received(mObserver)) {
                 mObserver.onChanged(t);
             }
         }

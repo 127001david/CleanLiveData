@@ -15,7 +15,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rightpoint.oknet.R;
-import com.rightpoint.oknet.module.Epidemic;
 import com.rightpoint.oknet.vm.CountViewModel;
 import com.rightpoint.oknet.vm.EpidemicViewModel;
 
@@ -29,8 +28,9 @@ public class FirstFragment extends Fragment {
     private CountViewModel countViewModel;
     private Observer<Integer> countObserver;
     private EpidemicViewModel epidemicViewModel;
-    private Observer<Epidemic> epidemicObserver;
+    private Observer<String> epidemicObserver;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +39,8 @@ public class FirstFragment extends Fragment {
         epidemicViewModel = new ViewModelProvider(getActivity()
                 , new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(EpidemicViewModel.class);
 
-        epidemicObserver = epidemicResult -> {
-            Log.d(EpidemicViewModel.TAG, "First: " + epidemicResult.total);
-        };
+        countObserver = integer -> mTvCount.setText(integer + "");
+        epidemicObserver = epidemicResult -> Log.d(EpidemicViewModel.TAG, "First: " + epidemicResult);
     }
 
     @Nullable
@@ -61,12 +60,8 @@ public class FirstFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        countObserver = integer -> {
-            Log.d("CountViewModel", "onViewCreated: " + integer);
-            mTvCount.setText(integer + "");
-        };
-        countViewModel.countLiveData.observe(this, countObserver);
 
+        countViewModel.countLiveData.observe(this, countObserver);
         epidemicViewModel.epidemicLiveData.observe(this, epidemicObserver);
     }
 
@@ -75,6 +70,6 @@ public class FirstFragment extends Fragment {
         Log.d("CountViewModel", "onPause: First");
         super.onPause();
         countViewModel.countLiveData.removeObserver(countObserver);
-        epidemicViewModel.epidemicLiveData.removeObserver(this);
+        epidemicViewModel.epidemicLiveData.removeObserver(epidemicObserver);
     }
 }

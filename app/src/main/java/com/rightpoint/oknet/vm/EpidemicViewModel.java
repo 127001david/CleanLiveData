@@ -4,8 +4,6 @@ import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
-import com.rightpoint.oknet.module.Epidemic;
-import com.rightpoint.oknet.ok.HttpResult;
 import com.rightpoint.oknet.ok.RetrofitService;
 import com.rightpoint.oknet.ok.UnPeekLiveData;
 import com.rightpoint.oknet.okservice.IEpidemicService;
@@ -24,7 +22,7 @@ import retrofit2.Response;
 public class EpidemicViewModel extends ViewModel {
     public static final String TAG = "EpidemicViewModel";
 
-    public UnPeekLiveData<Epidemic> epidemicLiveData;
+    public UnPeekLiveData<String> epidemicLiveData;
     private final IEpidemicService mEpidemicService;
 
     public EpidemicViewModel() {
@@ -33,17 +31,17 @@ public class EpidemicViewModel extends ViewModel {
     }
 
     public void loadEpidemic() {
-        mEpidemicService.requestHomeExamList(1).enqueue(new Callback<HttpResult<Epidemic>>() {
+        mEpidemicService.requestHomeExamList().enqueue(new Callback<String>() {
             @Override
-            public void onResponse(@NotNull Call<HttpResult<Epidemic>> call
-                    , @NotNull Response<HttpResult<Epidemic>> response) {
+            public void onResponse(@NotNull Call<String> call
+                    , @NotNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    epidemicLiveData.postValue(response.body().getResult());
+                    epidemicLiveData.postValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(@NotNull Call<HttpResult<Epidemic>> call
+            public void onFailure(@NotNull Call<String> call
                     , @NotNull Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }

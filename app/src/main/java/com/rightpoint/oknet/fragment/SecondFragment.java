@@ -28,7 +28,9 @@ public class SecondFragment extends Fragment {
     private CountViewModel countViewModel;
     private Observer<Integer> countObserver;
     private EpidemicViewModel epidemicViewModel;
+    private Observer<String> epidemicObserver;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +38,9 @@ public class SecondFragment extends Fragment {
                 , new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(CountViewModel.class);
         epidemicViewModel = new ViewModelProvider(getActivity()
                 , new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(EpidemicViewModel.class);
+
+        countObserver = integer -> mTvCount.setText(integer + "");
+        epidemicObserver = epidemic -> Log.d(EpidemicViewModel.TAG, "Second: " + epidemic);
     }
 
     @Nullable
@@ -55,14 +60,10 @@ public class SecondFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        countObserver = integer -> {
-            Log.d("CountViewModel", "onViewCreated: " + integer);
-            mTvCount.setText(integer + "");
-        };
-        countViewModel.countLiveData.observe(this, countObserver);
 
+        countViewModel.countLiveData.observe(this, countObserver);
         epidemicViewModel.epidemicLiveData.observe(this
-                , epidemic -> Log.d(EpidemicViewModel.TAG, "Second: " + epidemic.total));
+                , epidemicObserver);
     }
 
     @Override
@@ -70,6 +71,6 @@ public class SecondFragment extends Fragment {
         super.onPause();
         Log.d("CountViewModel", "onPause: Second");
         countViewModel.countLiveData.removeObserver(countObserver);
-        epidemicViewModel.epidemicLiveData.removeObserver(this);
+        epidemicViewModel.epidemicLiveData.removeObserver(epidemicObserver);
     }
 }
