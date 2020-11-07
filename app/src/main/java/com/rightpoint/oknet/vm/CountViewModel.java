@@ -1,8 +1,9 @@
 package com.rightpoint.oknet.vm;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rightpoint.oknet.ok.UnPeekLiveData;
+import com.rightpoint.oknet.ok.NoBackflowLiveData;
 
 /**
  * Description：
@@ -11,10 +12,13 @@ import com.rightpoint.oknet.ok.UnPeekLiveData;
  */
 public class CountViewModel extends ViewModel {
     private int mCount;
-    public UnPeekLiveData<Integer> countLiveData;
+    /**
+     * 直接继承自 MutableLiveData 会发生重复接收
+     */
+    public MutableLiveData<Integer> countLiveData;
 
     public CountViewModel() {
-        countLiveData = new UnPeekLiveData<>();
+        countLiveData = new NoBackflowLiveData<>();
     }
 
     public void increase() {

@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fb = findViewById(R.id.fb);
         fb.setScaleType(ImageView.ScaleType.CENTER);
-        fb.setOnClickListener(view -> epidemicViewModel.loadEpidemic());
-//        fb.setOnClickListener(view -> countViewModel.increase());
+        fb.setOnClickListener(view -> {
+            countViewModel.increase();
+            epidemicViewModel.loadEpidemic();
+        });
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -8,11 +8,11 @@ import androidx.lifecycle.Observer;
 import java.util.HashMap;
 
 /**
- * Description：
+ * Description：同一 Observer 多次注册，仅第一次会收到粘滞消息
  * @author Wonder Wei
  * Create date：2020/11/6 4:23 PM 
  */
-public class UnPeekLiveData<T> extends MutableLiveData<T> {
+public class NoBackflowLiveData<T> extends MutableLiveData<T> {
     private int mVersion = -1;
 
     private final HashMap<Integer, ObserverWrapper> observerWrappers = new HashMap<>();
