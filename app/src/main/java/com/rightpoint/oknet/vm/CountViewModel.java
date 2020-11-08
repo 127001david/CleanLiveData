@@ -3,7 +3,7 @@ package com.rightpoint.oknet.vm;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.rightpoint.oknet.ok.NoBackflowLiveData;
+import com.rightpoint.oknet.ok.CleanLiveData;
 
 /**
  * Description：
@@ -18,7 +18,7 @@ public class CountViewModel extends ViewModel {
     public MutableLiveData<Integer> countLiveData;
 
     public CountViewModel() {
-        countLiveData = new NoBackflowLiveData<>();
+        countLiveData = new CleanLiveData<>();
     }
 
     public void increase() {

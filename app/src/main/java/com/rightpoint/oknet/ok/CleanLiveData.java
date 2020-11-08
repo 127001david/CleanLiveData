@@ -12,7 +12,10 @@ import java.util.HashMap;
  * @author Wonder Wei
  * Create date：2020/11/6 4:23 PM 
  */
-public class NoBackflowLiveData<T> extends MutableLiveData<T> {
+public class CleanLiveData<T> extends MutableLiveData<T> {
+    /**
+     * 记录当前消息版本
+     */
     private int mVersion = -1;
 
     private final HashMap<Integer, ObserverWrapper> observerWrappers = new HashMap<>();
@@ -44,6 +47,7 @@ public class NoBackflowLiveData<T> extends MutableLiveData<T> {
     private boolean received(Observer<? super T> observer) {
         if (null != observerWrappers.get(observer.hashCode())) {
             ObserverWrapper observerWrapper = observerWrappers.get(observer.hashCode());
+            // observer 上次接收到的消息版本大于等于当前消息的版本时跳过这个 observer
             if (observerWrapper.mLastVersion >= mVersion) {
                 return true;
             } else {
@@ -56,6 +60,9 @@ public class NoBackflowLiveData<T> extends MutableLiveData<T> {
 
     private class ObserverWrapper implements Observer<T> {
         final Observer<? super T> mObserver;
+        /**
+         * 记录 Observer 上次接收到的消息版本
+         */
         int mLastVersion = -1;
 
         ObserverWrapper(Observer<? super T> observer) {

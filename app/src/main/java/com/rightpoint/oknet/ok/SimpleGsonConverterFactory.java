@@ -85,6 +85,7 @@ public class SimpleGsonConverterFactory extends Converter.Factory {
             BufferedSource bufferedSource = Okio.buffer(value.source());
             String tempStr = bufferedSource.readUtf8();
             bufferedSource.close();
+            // 直接返回 String 类型的数据
             if (type == String.class) {
                 return (T) tempStr;
             }

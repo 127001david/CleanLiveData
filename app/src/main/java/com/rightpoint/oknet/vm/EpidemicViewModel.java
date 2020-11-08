@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
 import com.rightpoint.oknet.ok.RetrofitService;
-import com.rightpoint.oknet.ok.NoBackflowLiveData;
+import com.rightpoint.oknet.ok.CleanLiveData;
 import com.rightpoint.oknet.okservice.IEpidemicService;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,11 +25,11 @@ public class EpidemicViewModel extends ViewModel {
     /**
      * 不会重复接收消息
      */
-    public NoBackflowLiveData<String> epidemicLiveData;
+    public CleanLiveData<String> epidemicLiveData;
     private final IEpidemicService mEpidemicService;
 
     public EpidemicViewModel() {
-        epidemicLiveData = new NoBackflowLiveData<>();
+        epidemicLiveData = new CleanLiveData<>();
         mEpidemicService = RetrofitService.createService(IEpidemicService.class);
     }
 
