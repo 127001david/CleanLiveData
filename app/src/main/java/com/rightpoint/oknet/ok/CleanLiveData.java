@@ -35,7 +35,10 @@ public class CleanLiveData<T> extends MutableLiveData<T> {
     }
 
     public void removeObserver(@NonNull Observer<? super T> observer) {
-        super.removeObserver(observerWrappers.get(observer.hashCode()));
+        ObserverWrapper observerWrapper = observerWrappers.get(observer.hashCode());
+        if (null != observerWrapper) {
+            super.removeObserver(observerWrapper);
+        }
     }
 
     @Override
@@ -45,8 +48,8 @@ public class CleanLiveData<T> extends MutableLiveData<T> {
     }
 
     private boolean received(Observer<? super T> observer) {
-        if (null != observerWrappers.get(observer.hashCode())) {
-            ObserverWrapper observerWrapper = observerWrappers.get(observer.hashCode());
+        ObserverWrapper observerWrapper = observerWrappers.get(observer.hashCode());
+        if (null != observerWrapper) {
             // observer 上次接收到的消息版本大于等于当前消息的版本时跳过这个 observer
             if (observerWrapper.mLastVersion >= mVersion) {
                 return true;
@@ -55,6 +58,7 @@ public class CleanLiveData<T> extends MutableLiveData<T> {
                 return false;
             }
         }
+
         return false;
     }
 
