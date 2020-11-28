@@ -8,5 +8,5 @@ package com.rightpoint.oknet.ok;
 public interface OkCallback<T> {
     void onResponse(T response);
 
-    void onFailure(String error);
+    void onFailure(OkError error);
 }

@@ -20,6 +20,8 @@ public class CleanLiveData<T> extends MutableLiveData<T> {
 
     private final HashMap<Integer, ObserverWrapper> observerWrappers = new HashMap<>();
 
+    private CleanLiveData<OkError> errorLiveData;
+
     public int getVersion() {
         return mVersion;
     }
@@ -34,6 +36,17 @@ public class CleanLiveData<T> extends MutableLiveData<T> {
         super.observe(owner, observerWrapper);
     }
 
+    public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer
+            , Observer<OkError> errorObserver) {
+        if (null != errorObserver) {
+            if (null == errorLiveData) {
+                errorLiveData = new CleanLiveData<>();
+            }
+            errorLiveData.observe(owner, errorObserver);
+        }
+        observe(owner, observer);
+    }
+
     public void removeObserver(@NonNull Observer<? super T> observer) {
         ObserverWrapper observerWrapper = observerWrappers.get(observer.hashCode());
         if (null != observerWrapper) {
@@ -45,6 +58,19 @@ public class CleanLiveData<T> extends MutableLiveData<T> {
     public void setValue(T value) {
         mVersion++;
         super.setValue(value);
+    }
+
+    public void postError(OkError error) {
+        if (null != errorLiveData) {
+            errorLiveData.postValue(error);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public void setError(OkError error) {
+        if (null != errorLiveData) {
+            errorLiveData.setValue(error);
+        }
     }
 
     private boolean received(Observer<? super T> observer) {

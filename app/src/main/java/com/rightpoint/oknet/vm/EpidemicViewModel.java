@@ -1,18 +1,13 @@
 package com.rightpoint.oknet.vm;
 
-import android.util.Log;
-
 import androidx.lifecycle.ViewModel;
 
-import com.rightpoint.oknet.ok.RetrofitService;
 import com.rightpoint.oknet.ok.CleanLiveData;
+import com.rightpoint.oknet.ok.OkCallback;
+import com.rightpoint.oknet.ok.OkCallbackProvider;
+import com.rightpoint.oknet.ok.OkError;
+import com.rightpoint.oknet.ok.RetrofitService;
 import com.rightpoint.oknet.okservice.IEpidemicService;
-
-import org.jetbrains.annotations.NotNull;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Description：
@@ -34,21 +29,17 @@ public class EpidemicViewModel extends ViewModel {
     }
 
     public void loadEpidemic() {
-        mEpidemicService.requestHomeExamList().enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NotNull Call<String> call
-                    , @NotNull Response<String> response) {
-                if (response.isSuccessful()) {
-                    epidemicLiveData.postValue(response.body());
-                }
-            }
+        mEpidemicService.requestHomeExamList()
+                .enqueue(OkCallbackProvider.getCallback(new OkCallback<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        epidemicLiveData.postValue(response);
+                    }
 
-            @Override
-            public void onFailure(@NotNull Call<String> call
-                    , @NotNull Throwable t) {
-                Log.d(TAG, "onFailure: " + t.getMessage());
-            }
-        });
-
+                    @Override
+                    public void onFailure(OkError error) {
+                        epidemicLiveData.postError(error);
+                    }
+                }));
     }
 }

@@ -13,7 +13,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/annotator" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/lib-annotation" />
+            <option value="$PROJECT_DIR$/lib-compiler" />
+            <option value="$PROJECT_DIR$/lib-inject" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

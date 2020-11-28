@@ -1,2 +1,6 @@
+include ':lib-annotation'
+include ':lib-inject'
+include ':lib-compiler'
+include ':annotator'
 include ':app'
 rootProject.name = "oknet"

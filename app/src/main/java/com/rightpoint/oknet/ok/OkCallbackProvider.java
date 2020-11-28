@@ -9,7 +9,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Description：
+ * Description：提供一个 OkCallback，对 retrofit2.Callback 进行了封装
+ * ，对接口返回值做统一的预处理，适合在项目中使用，当然也可以选择直接使用 retrofit2.Callback。
  * @author Wonder Wei
  * Create date：2020/11/9 1:58 PM 
  */
@@ -24,16 +25,16 @@ public class OkCallbackProvider {
                     if (response.body().code.equals("0")) {
                         callback.onResponse(response.body().result);
                     } else {
-                        callback.onFailure(response.body().errorMsg);
+                        callback.onFailure(new OkError("-1", response.body().errorMsg));
                     }
                 } else {
-                    callback.onFailure("请求失败");
+                    callback.onFailure(new OkError("-1", "请求失败"));
                 }
             }
 
             @Override
             public void onFailure(@NotNull Call<HttpResult<T>> call, @NotNull Throwable t) {
-                callback.onFailure(t.toString());
+                callback.onFailure(new OkError("-1", t.toString()));
             }
         };
     }

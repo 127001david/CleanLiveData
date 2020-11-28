@@ -59,6 +59,7 @@ public class FirstFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.d("CountViewModel", "onResume: First");
         super.onResume();
 
         countViewModel.countLiveData.observe(this, countObserver);

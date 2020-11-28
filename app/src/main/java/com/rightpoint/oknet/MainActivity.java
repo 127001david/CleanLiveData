@@ -13,6 +13,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.rightpoint.lib_annotation.BindView;
+import com.rightpoint.lib_inject.InjectHelper;
 import com.rightpoint.oknet.fragment.FirstFragment;
 import com.rightpoint.oknet.fragment.SecondFragment;
 import com.rightpoint.oknet.vm.CountViewModel;
@@ -23,10 +25,15 @@ public class MainActivity extends AppCompatActivity {
     private FirstFragment firstFragment;
     private SecondFragment secondFragment;
 
+    @BindView(R.id.view_bottom_navigation)
+    BottomNavigationView bn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        InjectHelper.inject(this);
 
         firstFragment = new FirstFragment();
         secondFragment = new SecondFragment();
@@ -34,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
         ViewPager vp = findViewById(R.id.vp);
         vp.setAdapter(new ViewPagerAdapter(getSupportFragmentManager()
                 , FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT));
-
-        BottomNavigationView bn = findViewById(R.id.view_bottom_navigation);
 
         vp.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -46,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         bn.setOnNavigationItemSelectedListener(item -> {
-            vp.setCurrentItem(item.getOrder());
+            vp.setCurrentItem(item.getOrder(), false);
             return true;
         });
 

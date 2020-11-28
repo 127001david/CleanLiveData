@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.rightpoint.oknet.R;
+import com.rightpoint.oknet.ok.OkError;
 import com.rightpoint.oknet.vm.CountViewModel;
 import com.rightpoint.oknet.vm.EpidemicViewModel;
 
@@ -29,6 +30,7 @@ public class SecondFragment extends Fragment {
     private Observer<Integer> countObserver;
     private EpidemicViewModel epidemicViewModel;
     private Observer<String> epidemicObserver;
+    private Observer<OkError> errorObserver;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -41,6 +43,8 @@ public class SecondFragment extends Fragment {
 
         countObserver = integer -> mTvCount.setText(integer + "");
         epidemicObserver = epidemic -> Log.d(EpidemicViewModel.TAG, "Second: " + epidemic);
+        errorObserver = okError -> Log.d(EpidemicViewModel.TAG
+                , null != okError ? okError.errorMsg : "error");
     }
 
     @Nullable
@@ -63,13 +67,12 @@ public class SecondFragment extends Fragment {
 
         countViewModel.countLiveData.observe(this, countObserver);
         epidemicViewModel.epidemicLiveData.observe(this
-                , epidemicObserver);
+                , epidemicObserver, errorObserver);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d("CountViewModel", "onPause: Second");
         countViewModel.countLiveData.removeObserver(countObserver);
         epidemicViewModel.epidemicLiveData.removeObserver(epidemicObserver);
     }
